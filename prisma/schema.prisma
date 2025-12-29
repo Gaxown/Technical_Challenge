@@ -1,0 +1,51 @@
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Patient {
+  id          String      @id @default(uuid())
+  name        String
+  email       String      @unique
+  phone       String?
+  dateOfBirth String?     @map("date_of_birth")
+  createdAt   String      @map("created_at")
+  updatedAt   String      @map("updated_at")
+  voiceNotes  VoiceNote[]
+
+  @@map("patients")
+}
+
+model VoiceNote {
+  id         String    @id @default(uuid())
+  patientId  String    @map("patient_id")
+  title      String
+  duration   Int
+  recordedAt String    @map("recorded_at")
+  metadata   String?
+  createdAt  String    @map("created_at")
+  updatedAt  String    @map("updated_at")
+  patient    Patient   @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  summaries  Summary[]
+
+  @@index([patientId])
+  @@map("voice_notes")
+}
+
+model Summary {
+  id          String    @id @default(uuid())
+  voiceNoteId String    @map("voice_note_id")
+  content     String
+  keywords    String?
+  createdAt   String    @map("created_at")
+  updatedAt   String    @map("updated_at")
+  voiceNote   VoiceNote @relation(fields: [voiceNoteId], references: [id], onDelete: Cascade)
+
+  @@index([voiceNoteId])
+  @@map("summaries")
+}
