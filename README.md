@@ -1,0 +1,6 @@
+To enhance this mini REST API for the technical interview, I would focus on three key areas without over-engineering. 
+First, replace the custom validation middleware with industry-standard packages like express-validator or keep Zod but add zod-to-openapi for automatic API documentation generation. 
+Second, add request/response DTOs (Data Transfer Objects) to separate API contracts from database models currently, Prisma models are exposed directly in responses, which couples the API to the database schema and makes versioning difficult we need loose coupling. 
+Third, implement a service layer between controllers and models to handle business logic (like the duplicate email check), keeping controllers thin and focused on HTTP concerns. 
+I'd also add class-validator with class-transformer for more robust type coercion and validation, use http-status-codes package for semantic status codes instead of magic numbers, and introduce a simple repository pattern to abstract Prisma calls, making the code more testable and database-agnostic. 
+Finally, I'd add a swagger-jsdoc integration for auto-generated API docs and include a few more edge case tests (concurrent requests, malformed UUIDs, SQL injection attempts) to demonstrate production-level thinking.
